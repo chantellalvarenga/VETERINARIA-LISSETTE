@@ -1,39 +1,44 @@
- <!-- HEADER -->
-  <header class="bg-dark text-white p-2 mb-3">
-    <div class="row">
-      <!-- LOGO -->
-      <div class="col-md-1">
-        <img
-          src="https://st2.depositphotos.com/5056293/9389/v/450/depositphotos_93899252-stock-illustration-vector-sign-veterinary.jpg"
-          alt="Logo veterinaria Lissette" height="50px" height="60px">
-      </div>
-      <!-- TÍTULO -->
-      <div class="col-md-4 pt-2">
-        <h2>Veterinaria Lissette</h2>
-      </div>
-
-      <!-- MENÚ -->
-      <div class="col-md-7">
-        <nav id="nav-menu-container">
-          <ul class="nav-menu">
-            <li><a [routerLink]="'home'">HOME</a></li>
-            <li *ngIf="Islogged"><a [routerLink]="'clientes'">CLIENTES</a></li>
-           <li *ngIf="!Islogged"><a (click)="OpenLogin()" >Login</a></li>
-           <li>
-           <mat-card class="example-card" *ngIf="Islogged">
-            <mat-card-header>
-    <div mat-card-avatar style=" background-image: url({{foto}});
-    background-size: cover;"></div>
-    <mat-card-title>{{NombreUsuario}}</mat-card-title>
-    <mat-card-subtitle><p><li><button class="btn btn-outline-info" style="width:130px;height:30px;text-align:center;" *ngIf="Islogged" (click)="CerrarSesion()">Cerrar sesion</button></li>
-</p></mat-card-subtitle>
-          </mat-card-header>
-</mat-card>
-</li>
-          </ul>
-        </nav>
-      </div>
-
+<!-- HEADER -->
+<header class="bg-dark text-white p-2 mb-3">
+  <div class="row">
+    <!-- LOGO -->
+    <div class="col-md-1 align-self-center">
+      <img
+        src="https://st2.depositphotos.com/5056293/9389/v/450/depositphotos_93899252-stock-illustration-vector-sign-veterinary.jpg"
+        alt="Logo veterinaria Lissette" height="50px" height="60px">
     </div>
-  </header>
-  <!-- FIN HEADER -->
+    <!-- TÍTULO -->
+    <div class="col-md-4 pt-2 align-self-center">
+      <h2>Veterinaria Lissette</h2>
+    </div>
+
+    <!-- MENÚ -->
+    <div class="col-md-7 align-self-start">
+      <nav id="nav-menu-container">
+        <ul class="nav-menu">
+          <li class="pt-3 mt-3" *ngIf="!Islogged"><a [routerLink]="'home'">HOME</a></li>
+          <li class="pt-3 mt-3" *ngIf="Islogged"><a [routerLink]="'clientes'">CLIENTES</a></li>
+          <li  class="pt-3 mt-3" *ngIf="!Islogged"><a [routerLink]="" (click)="OpenLogin()">LOGIN</a></li>
+          <li>
+            <mat-card class="example-card bg-dark" *ngIf="Islogged">
+              <mat-card-header>
+                <div mat-card-avatar style=" background-image: url({{foto}}); background-size: cover;"></div>
+                <mat-card-title class="text-white">{{NombreUsuario}}</mat-card-title>
+                <mat-card-subtitle>
+                  <p>
+          <li>
+            <button class="btn btn-outline-info text-center" *ngIf="Islogged" (click)="CerrarSesion()">Cerrar
+              sesion</button>
+          </li>
+          </p>
+          </mat-card-subtitle>
+          </mat-card-header>
+          </mat-card>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+  </div>
+</header>
+<!-- FIN HEADER -->
