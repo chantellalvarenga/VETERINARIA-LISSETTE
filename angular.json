@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "parcial2"
+  "defaultProject": "parcial2",
+  "cli": {
+    "analytics": false
+  }
 }

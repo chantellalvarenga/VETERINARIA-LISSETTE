@@ -1,25 +1,31 @@
-
 <h1 mat-dialog-title>Registro de mascotas</h1>
-<div mat-dialog-content> 
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th scope="col large">Mascotas</th>
-       <th scope="col large">Eliminar</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let mascota of ClienteActual.Mascotas; let indice=index" class="table-primary">
-      <th scope="row">{{indice+1}}-{{mascota}}</th>
-      <td> <button (click)="DeleteMascota(indice)" mat-fab color="warn"><mat-icon>delete</mat-icon> </button></td>
-    </tr>
-  </tbody>
-</table> 
+<div mat-dialog-content>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col large">Mascotas</th>
+        <th scope="col large">Editar</th>
+        <th scope="col large">Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let mascota of ClienteActual.Mascotas; let indice=index" class="table-primary">
+        <th scope="row">{{indice+1}}-{{mascota}}</th>
+        <td><button (click)="openForEdit(indice)" mat-fab color="link">
+            <mat-icon>edit</mat-icon>
+          </button></td>
+        <td> <button (click)="DeleteMascota(indice)" mat-fab color="warn">
+            <mat-icon>delete</mat-icon>
+          </button></td>
 
-<input type="text" placeholder="Ranger" class="form-control" [(ngModel)]="MascotaNueva"/>
-<button class="btn btn-space btn-success" (click)="AddMascota()">Agregar Mascota</button>
-
- </div>
+      </tr>
+    </tbody>
+  </table>
+  <input type="text" placeholder="Ranger" class="form-control" [(ngModel)]="MascotaNueva" />
+  <br>
+  <button class="btn btn-space btn-success mr-3" (click)="AddMascota()">Agregar</button>
+  <button class="btn btn-warning" (click)="EditMascota()">Modificar</button>
+</div>
 <div mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close >Cerrar</button>
+  <button mat-button mat-dialog-close>Cerrar</button>
 </div>
