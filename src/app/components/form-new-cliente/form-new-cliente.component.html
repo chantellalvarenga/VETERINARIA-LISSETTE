@@ -1,0 +1,99 @@
+  <!-- CRUD PLANTILLA -->
+  <div class="container mt-3">
+
+    <div class="col-md-10 mt-4 btn-primary p-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="container table-responsive">
+            <h2 class="text-dark text-center">CLIENTES</h2>
+          <!--<input type="text" (keyup)="BuscarCliente(busqueda)" [(ngModel)]="busqueda">-->
+            <table class="table tablehover">
+              <thead>
+                <tr>
+                  <th>Nombres</th>
+                  <th>Apellido</th>
+                  <th>DUI</th>
+                  <th>Borrar</th>
+                  <th>Editar</th>
+                   <th>Agregar/Ver Mascotas</th>
+                    <th>Agregar visita</th>
+                    <th>Ver todas las visitas</th>
+                </tr>
+              </thead>
+              <tbody>
+    
+                <tr *ngFor="let cliente of clientesArray;  let indice=index">
+                  <td>{{cliente.Nombres}} </td>
+                  <td>{{cliente.Apellidos}} </td>
+                  <td>{{cliente.DUI}}</td>
+                
+                  <td><button (click)="DeleteCliente(cliente)" mat-fab color="warn"><mat-icon>delete</mat-icon> </button></td>
+
+                  <td><button (click)="openForEdit(cliente)" mat-fab color="link"><mat-icon>edit</mat-icon> </button></td>
+
+                  <td><button (click)="OpenDialog(cliente)" mat-fab color="primary"><mat-icon>add_box</mat-icon> </button></td>
+                  
+                 <td><button (click)="NavigateVisitas(cliente.id)" mat-fab color="primary"><mat-icon>place</mat-icon> </button></td>
+
+                 <td><button (click)="NavigateHistorial(cliente.id)" mat-fab color="primary"><mat-icon>visibility</mat-icon> </button></td> 
+
+                   
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <form [formGroup]="FormularioActual">
+            
+            <div class="form-group">
+            <input type="text" placeholder="Nombres" class="form-control" formControlName="Nombres"/>
+            <!--Alerta de error-->
+            <div *ngIf="FormularioActual.controls.Nombres.invalid" class="alert alert-danger">
+            <div *ngIf="FormularioActual.controls.Nombres.errors.required">
+             Este campo es requerido
+             </div>
+             </div>
+            </div>
+            <div class="form-group">
+              <input type="text" placeholder="Apellidos" class="form-control" formControlName="Apellidos"/>
+               <!--Alerta de error-->
+            <div *ngIf="FormularioActual.controls.Apellidos.invalid" class="alert alert-danger">
+            <div *ngIf="FormularioActual.controls.Apellidos.errors.required">
+             Este campo es requerido
+             </div>
+             </div>
+            </div>
+            <div class="form-group">
+              <input type="text"  placeholder="DUI" class="form-control" formControlName="DUI"/>
+               <!--Alerta de error-->
+            <div *ngIf="FormularioActual.controls.DUI.invalid" class="alert alert-danger">
+            <div *ngIf="FormularioActual.controls.DUI.errors.required">
+             Este campo es requerido
+             </div>
+             </div>
+            </div>
+
+            <!---->
+             <div class="form-group">
+              <input type="text"  placeholder="Mascota" class="form-control" formControlName="Mascota"/>
+               <!--Alerta de error-->
+            <div *ngIf="FormularioActual.controls.Mascota.invalid" class="alert alert-danger">
+            <div *ngIf="FormularioActual.controls.Mascota.errors.required">
+             Este campo es requerido
+             </div>
+             </div>
+            </div>
+            <button class="btn btn-primary btn-space" (click)="AddCliente()">Agregar</button>
+            <button class="btn btn-warning" (click)="addOrEdit();UpdateCLiente()">Modificar</button>
+          </form>
+
+          
+        </div>
+      </div>
+    </div> <br>
+  </div>
+
+<!--
+  
+-->

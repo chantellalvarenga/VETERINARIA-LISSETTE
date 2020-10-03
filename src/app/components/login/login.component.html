@@ -1,0 +1,66 @@
+<h1 mat-dialog-title style="text-align:right"><button  mat-dialog-close mat-mini-fab color="warn" >
+          <mat-icon>close</mat-icon>
+        </button></h1>
+<div mat-dialog-content>
+
+<mat-tab-group align="center">
+  <mat-tab label="Ingresar"> 
+   
+<p>
+ <mat-form-field appearance="outline">
+    <mat-label>Correo</mat-label>
+    <input matInput placeholder="ejemplo@gmail.com" [(ngModel)]="correo">
+    <mat-icon matSuffix>mail_outline</mat-icon>
+
+  </mat-form-field>
+</p>
+<p>
+<mat-form-field appearance="fill">
+    <mat-label>Contraseña</mat-label>
+    <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="password">
+    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+  </mat-form-field>
+</p>
+  <button class="btn btn-outline-primary" (click)="LoginCorreoYcontra()" mat-dialog-close align="center" >Login</button>
+   <button (click)="LogginGoogle()"style="margin-left:10px" mat-dialog-close align="center" class="btn btn-outline-danger" mat-dialog-close align="center" ><img with="25px" height="25px" src="https://lh3.googleusercontent.com/proxy/ZKOrgwmBmiBzjN0uFAMGRlr4HpTlQaHXg8fZSWOeweqhtD13A19n_oe-CZdgkFetGqC6AjHrFFqpEWeTTssjL1odisv_5GUZuF782eFAVnPpfTSE78g" />Sing up with google</button>
+
+   </mat-tab>
+  <mat-tab label="Crear cuenta" align="center"> 
+  <p>
+  <mat-form-field appearance="outline">
+    <mat-label>Correo</mat-label>
+    <input matInput placeholder="ejemplo@gmail.com" [(ngModel)]="Newcorreo">
+    <mat-icon matSuffix>mail_outline</mat-icon>
+   
+  </mat-form-field>
+ </p>
+  <p>
+  <mat-form-field appearance="fill">
+    <mat-label>Contraseña</mat-label>
+    <input matInput [type]="hide1 ? 'password' : 'text'" [(ngModel)]="Newpassword" >
+    <button mat-icon-button matSuffix (click)="hide1 = !hide1" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+    <mat-icon>{{hide1 ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+  </mat-form-field>
+ </p>
+ <p>
+<mat-form-field appearance="fill">
+    <mat-label>Confirmar contraseña</mat-label>
+    <input matInput [type]="hide2 ? 'password' : 'text'">
+    <button mat-icon-button matSuffix (click)="hide2 = !hide2" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+    <mat-icon>{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+  </mat-form-field>
+</p>
+  <button class="btn btn-outline-success" (click)="SingUpAccount()" mat-dialog-close align="center" >Registrarse</button>
+   </mat-tab>
+
+</mat-tab-group>
+
+</div>
+<div mat-dialog-actions align="center">
+ <!-- <button mat-button mat-dialog-close>Cerrar</button>
+   <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Aceptar</button>-->
+</div>

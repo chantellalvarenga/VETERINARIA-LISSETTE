@@ -1,0 +1,37 @@
+  <div id="registrosDiarios" style="margin-top: 25px;margin-botton:50px">
+      <h3 class="text-center">Registros de visitas del cliente: {{ClienteActual.Nombres}} {{ClienteActual.Apellidos}} </h3>
+      <hr>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              
+              <th>Nº</th>
+              <th>Mascota</th>
+              <th>Medicamento</th>
+              <th>Tratamiento</th>
+              <th>Precio</th>
+              <th>Descuento</th>
+              <th>Total a pagar</th>
+              <th>Ver ticket</th>
+              <th>Eliminar</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let visita of ClienteActual.Visitas">
+            <td>{{visita.numero}}</td>
+              <td>{{visita.mascota}}</td>
+              <td>{{visita.medicamento}}</td>
+              <td>{{visita.tratamiento}}</td>
+              <td>{{visita.costo}}</td>
+              <td>{{visita.descuento}}</td>
+              <td>{{visita.total}}</td>
+              <td><button mat-fab color="primary" aria-label="Example icon button with a delete icon"><mat-icon>archive</mat-icon> </button></td>
+              <td><button mat-fab color="warn" (click)="DeleteVisita(visita.numero-1)"><mat-icon>delete</mat-icon> </button></td>
+              
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div >
