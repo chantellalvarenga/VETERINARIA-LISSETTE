@@ -5,7 +5,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { FormMascotasComponent } from '../form-mascotas/form-mascotas.component'
 import { Router } from '@angular/router';
-
+import { AlertasService } from 'src/app/services/alertas.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-form-new-cliente',
@@ -20,7 +21,7 @@ export class FormNewClienteComponent implements OnInit {
   NewCliente: Cliente = { Nombres: '', Apellidos: '', DUI: '', Mascotas: [], Visitas: [] };
   SelectedCliente: Cliente = { Nombres: '', Apellidos: '', DUI: '', Mascotas: [], Visitas: [] };
   public FormularioActual: FormGroup;
-  constructor(private formBuilder: FormBuilder, private database: DatabaseService, private dialog: MatDialog, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private database: DatabaseService, private dialog: MatDialog, private router: Router, private alerta: AlertasService) {
     this.database.getClientes().subscribe(res =>
     //res es la respuesta de objetos desde firebase
     {
@@ -68,19 +69,22 @@ export class FormNewClienteComponent implements OnInit {
   AddCliente() {
 
     //validacion de campos vacios
-    if (this.FormularioActual.controls['Nombres'].value == "" || this.FormularioActual.controls['Apellidos'].value == "" || this.FormularioActual.controls['DUI'].value == "") {
+    if (this.FormularioActual.controls['Nombres'].value == "" || this.FormularioActual.controls['Apellidos'].value == "" || this.FormularioActual.controls['DUI'].value == ""
+      || this.FormularioActual.controls['Nombres'].value == null || this.FormularioActual.controls['Apellidos'].value == null || this.FormularioActual.controls['DUI'].value == null) {
 
-      alert('Ingrese todos los datos personales del cliente');
-
+      // alert('Ingrese todos los datos personales del cliente');
+      this.alerta.showErrorAlert('Ingrese todos los datos personales del cliente');
     } else {
 
       this.addOrEdit();
       this.database.AddCliente(this.NewCliente)
         .then(res => {
-          alert('CLIENTE AGREGADO!');
+          //alert('CLIENTE AGREGADO!');
+          this.alerta.showSuccessAlert('Cliente Agregado');
           this.FormularioActual.reset();
         }).catch(err => {
-          alert('Error');
+          //alert('Error');
+          this.alerta.showErrorAlert('Lo sentimos, ha ocurrido un error');
           console.error(err);
         });
 
@@ -90,45 +94,84 @@ export class FormNewClienteComponent implements OnInit {
   UpdateCLiente() {
 
     //validacion de campos vacios
-    if (this.FormularioActual.controls['Nombres'].value == null || this.FormularioActual.controls['Apellidos'].value == null || this.FormularioActual.controls['DUI'].value == null) {
+    if (this.FormularioActual.controls['Nombres'].value == "" || this.FormularioActual.controls['Apellidos'].value == "" || this.FormularioActual.controls['DUI'].value == ""
+      || this.FormularioActual.controls['Nombres'].value == null || this.FormularioActual.controls['Apellidos'].value == null || this.FormularioActual.controls['DUI'].value == null) {
 
-      alert('Ingrese todos los datos personales del cliente');
 
+      //alert('Ingrese todos los datos personales del cliente');
+      this.alerta.showErrorAlert('Seleccione un cliente');
     } else {
 
       this.NewCliente.id = this.SelectedCliente.id;
-      if (confirm('¿Esta seguro de modificar el Registro?')) {
-        delete this.NewCliente.Visitas;
-        delete this.NewCliente.Mascotas;
-        this.database.UpdateCliente(this.NewCliente).then(res => {
-          console.log(res);
-          alert('Cliente Modificado');
-          this.FormularioActual.reset();
+
+      Swal.fire({
+        title: '¿Estas seguro?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, modificalo!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire(
+            'Modificado!',
+            'El cliente ha sido modificado',
+            'success'
+          )
+
+          //codigo
+          delete this.NewCliente.Visitas;
+          delete this.NewCliente.Mascotas;
+          this.database.UpdateCliente(this.NewCliente).then(res => {
+            console.log(res);
+            //alert('Cliente Modificado');
+            this.FormularioActual.reset();
+          }
+          )
+            .catch(err => {
+              //alert('ha ocurrido un error');
+              this.alerta.showErrorAlert('Lo siento ha ocurrido un error');
+              console.error(err);
+            });
+          //
         }
-        )
-          .catch(err => {
-            alert('ha ocurrido un error');
-            console.error(err);
-          });
-      }
+      })
 
     }
 
   }
 
   DeleteCliente(_cliente: Cliente) {
-    if (confirm('¿Esta seguro de eliminar el Registro?')) {
-      this.database.DeleteCliente(_cliente).then(res => {
-        alert('Cliente eliminado');
-        this.FormularioActual.reset();
-      })
-        .catch(err => {
-          alert('Ha ocurrido un error');
-          console.error(err);
-        }
+
+    Swal.fire({
+      title: '¿Estas seguro?',
+      text: "Esta accion no podra revertirse!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, borralo!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          'Eliminado!',
+          'Cliente eliminado',
+          'success'
         )
-    }
-  }
+        this.database.DeleteCliente(_cliente).then(res => {
+          //alert('Cliente eliminado');
+          this.FormularioActual.reset();
+        })
+          .catch(err => {
+            //alert('Ha ocurrido un error');
+            this.alerta.showErrorAlert('Lo siento ha ocurrido un error');
+            console.error(err);
+          }
+          )
+      }
+    })
+
+  }//termina metodo
 
   OpenDialog(_Cliente: Cliente) {
 
