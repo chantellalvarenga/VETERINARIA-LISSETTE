@@ -17,7 +17,7 @@ export class AuthService {
       if (user){
         this.usuario = user;
         localStorage.setItem('user', JSON.stringify(this.usuario));
-        console.log(this.usuario);
+        //console.log(this.usuario);
       } else {
         localStorage.setItem('user', null);
       }
@@ -60,7 +60,7 @@ async logout(){
       if (result.user){
         this.usuario = result.user;
         localStorage.setItem('user', JSON.stringify(this.usuario));
-        console.log(this.usuario);
+        //console.log(this.usuario);
       } else {
         localStorage.setItem('user', null);
       }
@@ -80,7 +80,7 @@ SignUp(email, password) {
       if (result.user){
         this.usuario = result.user;
         localStorage.setItem('user', JSON.stringify(this.usuario));
-        console.log(this.usuario);
+        //console.log(this.usuario);
       } else {
         localStorage.setItem('user', null);
       }

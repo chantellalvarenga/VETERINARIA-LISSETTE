@@ -24,6 +24,7 @@ import { HomeComponent } from './components/home/home.component';
 import {MaterialModule} from '../material.module';
 import { FormMascotasComponent } from './components/form-mascotas/form-mascotas.component';
 import { LoginComponent } from './components/login/login.component';
+import { TicketComponent } from './components/ticket/ticket.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { LoginComponent } from './components/login/login.component';
     FooterComponent,
     HomeComponent,
     FormMascotasComponent,
-    LoginComponent
+    LoginComponent,
+    TicketComponent
   ],
   imports: [
     BrowserModule,
