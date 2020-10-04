@@ -16,7 +16,7 @@
     <div class="col-md-7 align-self-start">
       <nav id="nav-menu-container">
         <ul class="nav-menu">
-          <li class="pt-3 mt-3" *ngIf="!Islogged"><a [routerLink]="'home'">HOME</a></li>
+          <li class="pt-3 mt-3"><a [routerLink]="'home'">HOME</a></li>
           <li class="pt-3 mt-3" *ngIf="Islogged"><a [routerLink]="'clientes'">CLIENTES</a></li>
           <li  class="pt-3 mt-3" *ngIf="!Islogged"><a [routerLink]="" (click)="OpenLogin()">LOGIN</a></li>
           <li>

@@ -14,7 +14,15 @@ export class AuthService {
   NombreUsuario: string;
   FotoPerfil: string;
   correo: string;
-  constructor(public afAuth: AngularFireAuth, public router: Router, public ngZone: NgZone) {
+  constructor(
+    public afAuth: AngularFireAuth,
+    public router: Router,
+    public ngZone: NgZone,
+    private alerta: AlertasService
+  ) {
+
+    /* Guardar datos de usuario en almacenamiento local cuando
+   iniciado sesión y configurando nulo al cerrar sesión*/
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.usuario = user;
@@ -25,29 +33,33 @@ export class AuthService {
       }
     })
   }
+
+
   ClearUser() {
     this.NombreUsuario = '';
     this.FotoPerfil = '';
     this.correo = '';
   }
 
+  
+
   async loginWithGoogle() {
     await this.afAuth.signInWithPopup(new auth.GoogleAuthProvider());
     this.NombreUsuario = this.usuario.displayName;
     this.FotoPerfil = this.usuario.photoURL;
     this.correo = this.usuario.email;
-    location.reload();
-
+    window.location.reload();
+    //this.router.navigate(['/clientes']);
   }
-  async logout() {
 
+  async logout() {
     await this.afAuth.signOut();
     localStorage.removeItem('user');
     //alert('has salido');
     Swal.fire({
       position: 'center',
       icon: 'success',
-      title: 'Has cerrado sesion',
+      title: 'Has cerrado sesión',
       showConfirmButton: false,
       timer: 1500
     })
@@ -64,7 +76,9 @@ export class AuthService {
   SignIn(email, password) {
     return this.afAuth.signInWithEmailAndPassword(email, password).then((result) => {
       this.ngZone.run(() => {
-        this.router.navigate(['home']);
+        this.alerta.showSuccessAlert('Inicio de sesión exitoso!');
+        window.location.reload();
+        //this.router.navigate(['/clientes']);
       });
       if (result.user) {
         this.usuario = result.user;
@@ -75,7 +89,7 @@ export class AuthService {
       }
     }).catch((error) => {
       // window.alert("Por favor revisar credenciales")
-      window.alert(error.message)
+      this.alerta.showErrorAlert('Por favor revisar credenciales');
     })
   }
 
@@ -87,14 +101,18 @@ export class AuthService {
         y vuelve la funcion*/
         this.SendVerificationMail();
         if (result.user) {
+          this.alerta.showSuccessAlert('Registro exitoso!');
           this.usuario = result.user;
           localStorage.setItem('user', JSON.stringify(this.usuario));
           console.log(this.usuario);
+          window.location.reload();
+          //this.router.navigate(['/clientes']);
+          
         } else {
           localStorage.setItem('user', null);
         }
       }).catch((error) => {
-        window.alert(error.message)
+        this.alerta.showErrorAlert('Ha ocurrido un error');
       })
   }
 
@@ -104,6 +122,16 @@ export class AuthService {
       .then(() => {
         this.router.navigate(['verify-email-address']);
       })
+  }
+
+  // Restablecer contraseña olvidada
+  ForgotPassword(passwordResetEmail) {
+    return this.afAuth.sendPasswordResetEmail(passwordResetEmail)
+    .then(() => {
+      window.alert('Password reset email sent, check your inbox.');
+    }).catch((error) => {
+      window.alert(error)
+    })
   }
 
 
