@@ -4,6 +4,8 @@ import { Cliente } from 'src/app/models/cliente';
 import { DatabaseService } from 'src/app/services/database.service';
 import Swal from 'sweetalert2';
 import { AlertasService } from 'src/app/services/alertas.service';
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { EditVisitaComponent } from '../edit-visita/edit-visita.component';
 
 
 @Component({
@@ -14,7 +16,7 @@ import { AlertasService } from 'src/app/services/alertas.service';
 export class TablavisitasComponent implements OnInit {
   ClienteActual:Cliente={Nombres:'',Apellidos:'',DUI:'',Mascotas:[],Visitas:[]};
   clientesArray:Cliente[];
-  constructor(private database:DatabaseService,private router: Router, private activatedRoute: ActivatedRoute,private alerta: AlertasService ) {
+  constructor( private dialog: MatDialog,private database:DatabaseService,private router: Router, private activatedRoute: ActivatedRoute,private alerta: AlertasService ) {
 
     this.database.getClientes().subscribe(res=>
       //res es la respuesta de objetos desde firebase
@@ -79,6 +81,14 @@ export class TablavisitasComponent implements OnInit {
     })
      
   }
+
+  OpenDialog(_Cliente: Cliente,numero:number) {
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {"cliente":_Cliente,"visita":numero};
+    this.dialog.open(EditVisitaComponent, dialogConfig);
+  }
+
 
 
 }

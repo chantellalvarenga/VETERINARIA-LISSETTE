@@ -25,6 +25,7 @@ import {MaterialModule} from '../material.module';
 import { FormMascotasComponent } from './components/form-mascotas/form-mascotas.component';
 import { LoginComponent } from './components/login/login.component';
 import { TicketComponent } from './components/ticket/ticket.component';
+import { EditVisitaComponent } from './components/edit-visita/edit-visita.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { TicketComponent } from './components/ticket/ticket.component';
     HomeComponent,
     FormMascotasComponent,
     LoginComponent,
-    TicketComponent
+    TicketComponent,
+    EditVisitaComponent
   ],
   imports: [
     BrowserModule,
@@ -54,6 +56,6 @@ import { TicketComponent } from './components/ticket/ticket.component';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [FormMascotasComponent]
+  entryComponents: [FormMascotasComponent,EditVisitaComponent ]
 })
 export class AppModule { }
