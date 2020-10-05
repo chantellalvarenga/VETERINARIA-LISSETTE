@@ -5,6 +5,8 @@ import { Visita } from 'src/app/models/visita';
 import { DatabaseService } from 'src/app/services/database.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as firebase from 'firebase';
+import Swal from 'sweetalert2';
+import { AlertasService } from 'src/app/services/alertas.service';
 
 @Component({
   selector: 'app-formvisita',
@@ -20,7 +22,7 @@ export class FormvisitaComponent implements OnInit {
   costo: number;
 
   public FormularioActual: FormGroup;
-  constructor(private formBuilder: FormBuilder, private database: DatabaseService, private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private formBuilder: FormBuilder, private database: DatabaseService, private router: Router, private activatedRoute: ActivatedRoute, private alerta: AlertasService) {
     this.database.getClientes().subscribe(res =>
     //res es la respuesta de objetos desde firebase
     {
@@ -39,7 +41,9 @@ export class FormvisitaComponent implements OnInit {
         this.ClienteActual = this.clientesArray.find(x => x.id == params.id);
       }
       else {
-        alert('no encontrado');
+        //alert('no encontrado');
+
+        this.alerta.showErrorAlert('Cliente no encontrado');
       }
 
 
@@ -100,25 +104,30 @@ export class FormvisitaComponent implements OnInit {
   AddVisita() {
     if (this.FormularioActual.controls['tratamiento'].value == "" || this.FormularioActual.controls['medicamento'].value == "" || this.FormularioActual.controls['mascota'].value == "" || this.FormularioActual.controls['costo'].value == "") {
 
-      alert('Debe ingresar todos los campos');
+      //alert('Debe ingresar todos los campos');
+      this.alerta.showErrorAlert('Debe ingresar todos los campos');
 
     } else {
 
-      if (confirm('¿Esta seguro/a de agregar esta visita?')) {
-        this.addOrEdit();
-        this.VisitaActual.fecha = firebase.database.ServerValue.TIMESTAMP;
-        this.ClienteActual.Visitas.push(this.VisitaActual);
-        this.database.UpdateCliente(this.ClienteActual).then
-          (res => {
-            alert('visita agregada');
-            this.router.navigate(['/historial/' + this.ClienteActual.id]);
-          }
 
-          ).catch(error => {
-            alert('Ha ocurrido un error');
-            console.error(error)
-          })
-      }
+      this.addOrEdit();
+      this.VisitaActual.fecha = firebase.database.ServerValue.TIMESTAMP;
+      this.ClienteActual.Visitas.push(this.VisitaActual);
+      this.database.UpdateCliente(this.ClienteActual).then
+        (res => {
+          //alert('visita agregada');
+          this.alerta.showSuccessAlert('Visita agregada');
+          this.router.navigate(['/historial/' + this.ClienteActual.id]);
+        }
+
+        ).catch(error => {
+          //alert('Ha ocurrido un error');
+          this.alerta.showErrorAlert('Lo sentimos ha ocurrido un error');
+          console.error(error)
+        })
+
+
+
 
     }
   }

@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { DatabaseService } from 'src/app/services/database.service';
 import { Cliente } from '../../models/cliente';
+import { AlertasService } from 'src/app/services/alertas.service';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-form-mascotas',
   templateUrl: './form-mascotas.component.html',
@@ -17,7 +19,7 @@ export class FormMascotasComponent implements OnInit {
   clientesArray: Cliente[] = [];
 
   constructor(private dialogRef: MatDialogRef<FormMascotasComponent>,
-    @Inject(MAT_DIALOG_DATA) data, private database: DatabaseService) {
+    @Inject(MAT_DIALOG_DATA) data, private database: DatabaseService, private alerta: AlertasService) {
     this.ClienteActual = data;
     this.database.getClientes().subscribe(res =>
     //res es la respuesta de objetos desde firebase
@@ -36,7 +38,8 @@ export class FormMascotasComponent implements OnInit {
         this.ClienteActual = this.clientesArray.find(x => x.id == this.ClienteActual.id);
       }
       else {
-        alert('no encontrado');
+        //alert('no encontrado');
+        this.alerta.showErrorAlert('Ingrese el nombre de la mascota');
       }
 
 
@@ -50,72 +53,110 @@ export class FormMascotasComponent implements OnInit {
 
   AddMascota() {
 
-    if (this.MascotaNueva == null) {
+    if (this.MascotaNueva == null || this.MascotaNueva == "") {
 
-      alert('Ingrese el nombre de la mascota');
+      // alert('Ingrese el nombre de la mascota');
+      this.alerta.showErrorAlert('Ingrese el nombre de la mascota');
+
 
     } else {
 
       this.ClienteActual.Mascotas.push(this.MascotaNueva);
       this.database.UpdateCliente(this.ClienteActual).then(res => {
-        alert('Mascota agregada');
+        //alert('Mascota agregada');
+        this.alerta.showSuccessAlert('Mascota agregada');
       })
         .catch()
       {
         error => {
-          alert('Ha ocurrido un error');
+          //alert('Ha ocurrido un error');
+          this.alerta.showErrorAlert('Lo sentimos ha ocurrido un error');
+
+
           console.error(error);
         }
       }
-      
+
     }
   }
 
   DeleteMascota(indice: number) {
-    if (confirm('¿Esta seguro de eliminar la mascota?')) {
-      this.ClienteActual.Mascotas.splice(indice, 1);
-      this.database.UpdateCliente(this.ClienteActual).then
-        (res => {
-          alert('Mascota eliminada!');
 
-        })
-        .catch(error => {
-          alert('Ha ocurrido un error');
-          console.error(error);
-        });
-    }
-  }
+    Swal.fire({
+      title: '¿Estas seguro?',
+      text: "Esta accion no podra revertirse!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, borralo!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          'Eliminado!',
+          'Mascota eliminada',
+          'success'
+        )
+        this.ClienteActual.Mascotas.splice(indice, 1);
+        this.database.UpdateCliente(this.ClienteActual).then
+          (res => {
 
-  EditMascota(): void {
-
-    if (this.MascotaNueva == null) {
-
-      alert('Ingrese el nombre de la mascota');
-
-    } else {
-
-      if (confirm('¿Esta seguro de modificar mascota?')) {
-
-        //actualizamos el nombre de la mascota seleccionada
-        this.ClienteActual.Mascotas[this.MascotaSeleccionada] = this.MascotaNueva;
-
-        this.database.UpdateCliente(this.ClienteActual).then(res => {
-          alert('Mascota modificada exitosamente');
-
-          //limpiar input nombre mascota
-          this.MascotaNueva = null;
-        })
-          .catch()
-        {
-          error => {
-            alert('Ha ocurrido un error');
+          })
+          .catch(error => {
+            //alert('Ha ocurrido un error');
+            this.alerta.showErrorAlert('Lo sentimos ha ocurrido un error');
             console.error(error);
-          }
-        }
+          });
       }
+    })
 
-    }
   }
+
+  EditMascota(): void { //comienza metodo
+
+    if (this.MascotaNueva == null || this.MascotaNueva == "") {
+      //alert('Ingrese el nombre de la mascota');
+      this.alerta.showErrorAlert('Ingrese el nombre de la mascota');
+    } else {
+      //comienza sweetAlert
+      Swal.fire({
+        title: '¿Estas seguro?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, modificalo!'
+      }).then((result) => {
+        //si le da aceptar mostramos exito y actualizamos mascota
+        if (result.isConfirmed) {
+          Swal.fire(
+            'Modificado!',
+            'La mascota ha sido modificada',
+            'success'
+          )
+
+          //actualizamos el nombre de la mascota seleccionada
+          this.ClienteActual.Mascotas[this.MascotaSeleccionada] = this.MascotaNueva;
+
+          this.database.UpdateCliente(this.ClienteActual).then(res => {
+            //limpiar input nombre mascota
+            this.MascotaNueva = null;
+          })
+            .catch()
+          {
+            error => {
+              //alert('Ha ocurrido un error');
+              this.alerta.showErrorAlert('Seleccione una mascota');
+              console.error(error);
+            }
+          }
+
+
+        }
+      })//termina sweetAlert
+
+    } //termina else
+  } //termina metodo
 
   openForEdit(indice: number): void {
     //El indice de la mascota seleccionada lo guardamos en la variable del componente

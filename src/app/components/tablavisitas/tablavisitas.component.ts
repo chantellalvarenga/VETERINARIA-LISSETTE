@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cliente } from 'src/app/models/cliente';
 import { DatabaseService } from 'src/app/services/database.service';
+import Swal from 'sweetalert2';
+import { AlertasService } from 'src/app/services/alertas.service';
 
 
 @Component({
@@ -12,7 +14,7 @@ import { DatabaseService } from 'src/app/services/database.service';
 export class TablavisitasComponent implements OnInit {
   ClienteActual:Cliente={Nombres:'',Apellidos:'',DUI:'',Mascotas:[],Visitas:[]};
   clientesArray:Cliente[];
-  constructor(private database:DatabaseService,private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private database:DatabaseService,private router: Router, private activatedRoute: ActivatedRoute,private alerta: AlertasService ) {
 
     this.database.getClientes().subscribe(res=>
       //res es la respuesta de objetos desde firebase
@@ -32,7 +34,9 @@ export class TablavisitasComponent implements OnInit {
     }
     else
     {
-      alert('no encontrado');
+      //alert('no encontrado');
+      this.alerta.showErrorAlert('No encontrado');
+
     }
          
           
@@ -44,22 +48,36 @@ export class TablavisitasComponent implements OnInit {
 
   DeleteVisita(indice:number)
   {
-
-    if(confirm('¿Esta seguro de borrar la visita?'))
+    Swal.fire({
+      title: '¿Estas seguro?',
+      text: "Esta accion no podra revertirse!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, borralo!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        
+    this.ClienteActual.Visitas.splice(indice,1);
+    this.database.UpdateCliente(this.ClienteActual).then(res=>{
+      //alert('visita eliminada')
+      Swal.fire(
+        'Eliminado!',
+          'Visita eliminado',
+          'success'
+      )
+    })
+    .catch(error=>
     {
-      
-  this.ClienteActual.Visitas.splice(indice,1);
-  this.database.UpdateCliente(this.ClienteActual).then
-  (res=>{alert('visita eliminada')})
-  .catch(error=>
-    {
-      alert('ha ocurrido un error');
+      //alert('ha ocurrido un error');
+      this.alerta.showErrorAlert('Ha ocurrido un error');
       console.error(error);
     });
 
-  
-}
-  
+      }
+    })
+     
   }
 
 
