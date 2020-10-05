@@ -19,10 +19,21 @@ export class HomeComponent implements OnInit {
   @ViewChild('MyA') myA : ElementRef
 
   getFile(){
-    let templateTxt = 
-    `texto de prueba para poder poner en el archivo 
-    Nombre de cliente: ${this.nombre}
-    Direccion: ${this.dir}`
+    let templateTxt = `
+Veterinaria Lissette                         Tel: 2305-9882
+Calle El Bambú, Ayutuxtepeque, #22.        Nit: 0614-300899-111-9
+
+Cliente:\t\t${'nombreCliente'}\t\t\tFecha:
+DUI:\t\t\t${'059296381'}\t\t\t28/08/2020
+Mascota tratada:\t${'nombremascota'}
+
+Medicamento a Administrar:\t${'Medicamento'}
+Tratamiento Recomendado:\t${'Tratamiento'}
+
+\t\t\tPrecio:\t\t\t ${'precio'}
+\t\t\tDescuento:\t\t-${'descuento'}
+\t\t\tTotal a Pagar:\t\t=${'total'}
+`
 
     var blob = new Blob([templateTxt], {type: 'text/text'});
     this.url = window.URL.createObjectURL(blob)

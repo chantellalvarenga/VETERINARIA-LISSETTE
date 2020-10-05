@@ -22,11 +22,16 @@ export class FormvisitaComponent implements OnInit {
   costo: number;
 
   public FormularioActual: FormGroup;
-  constructor(private formBuilder: FormBuilder, private database: DatabaseService, private router: Router, private activatedRoute: ActivatedRoute, private alerta: AlertasService) {
-    this.database.getClientes().subscribe(res =>
-    //res es la respuesta de objetos desde firebase
-    {
 
+  constructor(
+    private formBuilder: FormBuilder,
+    private database: DatabaseService,
+    private router: Router, 
+    private activatedRoute: ActivatedRoute, 
+    private alerta: AlertasService
+  ) {
+    this.database.getClientes().subscribe(res =>{
+    //res es la respuesta de objetos desde firebase
       this.clientesArray = [];
       this.clientesArray = res.map(item => {
         return {

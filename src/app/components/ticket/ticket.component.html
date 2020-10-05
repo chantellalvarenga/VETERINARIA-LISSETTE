@@ -1,7 +1,12 @@
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ticket">
-  Mostrar ticket
-</button>
+  <div *ngIf="exp.test(router.url); else visitas">
+    <button  mat-fab color="primary" data-toggle="modal" data-target="#ticket">
+      <mat-icon>archive</mat-icon>
+    </button>
+  </div>
+  <ng-template #visitas>
+    <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#ticket">Ver Ticket</button>
+  </ng-template>
 
 <!-- Modal -->
 <div class="modal fade" id="ticket" tabindex="-1" aria-labelledby="ticketLabel" aria-hidden="true">
@@ -20,27 +25,30 @@
             <p>Calle El Bambú, Ayutuxtepeque, #22.</p>
           </div>
           <div class="col-5 text-center py-3">
-            <p>Tel:2305-9882.</p>
-            <p>Nit: 0614-300899-111-9.</p>
+            <p>Tel: 2305-9882</p>
+            <p>Nit: 0614-300899-111-9</p>
           </div>
         </div>
         <div class="row">
           <div class="col-8 text-left">
-            <p class="px-3"><strong>Cliente:</strong><u> Chantell Alvarenga</u></p>
-            <p class="px-3"><strong>DUI:</strong><u> 059296381</u></p>
+            <p class="px-3"><strong>Cliente: </strong><u>{{dataCliente.Nombres}} {{dataCliente.Apellidos}}</u></p>
+            <p class="px-3"><strong>DUI: </strong><u> {{dataCliente.DUI}}</u></p>
+            <p class="px-3" *ngIf='opMascota == null; else formMascota'><strong>Mascota: </strong><u> {{dataVisita.mascota}}</u></p>
+            <ng-template #formMascota>
+              <p class="px-3" ><strong>Mascota: </strong><u> {{opMascota}}</u></p>
+            </ng-template>
           </div>
           <div class="col-4">
             <p><strong>Fecha:</strong></p>
-            <p>28/08/2020</p>
+            <p>{{date.getDate()}}/{{date.getMonth()}}/{{date.getFullYear()}}</p>
           </div>
         </div>
   
         <div class="table-responsive">
-          <table class="table table-striped table-hover pt-2">
+          <table class="table table-striped pt-2">
             <thead>
               <tr>
-                <th>Cant.</th>
-                <th>Descripción</th>
+                <th>Descripcion</th>
                 <th>Precio</th>
                 <th>Descuento</th>
                 <th>Total</th>
@@ -49,19 +57,18 @@
   
             <tbody>
               <tr>
-                <td>1</td>
-                <td>Compra de medicamento + tratamiento</td>
-                <td>$100.00</td>
-                <td>$5.00</td>
-                <td><b>$95.00</b></td>
+                <td>Medicamento: {{dataVisita.medicamento}} y Tratamiento: {{dataVisita.tratamiento}}</td>
+                <td class="text-right">${{dataVisita.costo}}</td>
+                <td class="text-right">-${{dataVisita.descuento}}</td>
+                <td class="text-right"><b>${{dataVisita.total}}</b></td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <a class="btn btn-primary" (click)="downloadFile()" #getTicket >Descargar Ticket</a>
       </div>
     </div>
   </div>

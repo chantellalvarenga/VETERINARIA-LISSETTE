@@ -27,7 +27,7 @@
               <td>{{visita.costo}}</td>
               <td>{{visita.descuento}}</td>
               <td>{{visita.total}}</td>
-              <td><button mat-fab color="primary" aria-label="Example icon button with a delete icon"><mat-icon>archive</mat-icon> </button></td>
+              <td><app-ticket [dataVisita]="visita" [dataCliente]="ClienteActual" [opMascota]="null"></app-ticket></td>
               <td><button mat-fab color="warn" (click)="DeleteVisita(visita.numero-1)"><mat-icon>delete</mat-icon> </button></td>
               
             </tr>

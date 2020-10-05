@@ -83,6 +83,9 @@
           <input type="reset" class="btn btn-warning btn-block" value="Limpiar" id="limpiar">
         </div>
         <div class="col-md-3">
+          <app-ticket [dataCliente]="ClienteActual" [dataVisita]="VisitaActual" [opMascota]="FormularioActual.controls.mascota.value"></app-ticket>
+        </div>
+        <div class="col-md-3">
           <button type="submit" class="btn btn-success btn-block" (click)="AddVisita()">Guardar</button>
         </div>
       </div>
