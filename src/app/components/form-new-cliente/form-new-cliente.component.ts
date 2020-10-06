@@ -195,11 +195,35 @@ export class FormNewClienteComponent implements OnInit {
 
   BuscarCliente(Parametro: string) {
 
-    this.clientesBusqueda = this.clientesArray;
 
-    this.clientesArray[0] = this.clientesArray.find(x => x.Nombres == Parametro || x.Apellidos == Parametro || x.DUI == Parametro);
+    if(Parametro.length==0)
+    {
+      this.database.getClientes().subscribe(res =>
+        {
+          //res es la respuesta de objetos desde firebase
+          this.clientesArray = [];
+          this.clientesArray = res.map(item => {
+            return {
+              id: item.payload.doc.id,
+              ...item.payload.doc.data()
+            } as Cliente
+          });
+          console.log(this.clientesArray);
+    
+        });
+    }
+    else{
+    this.database.SerachClientes(Parametro).then(res=>{
 
-
+      this.clientesArray = res.docs.map(item => {
+        return {
+          id: item.id,
+          ...item.data()
+        } as Cliente
+      });
+    }
+    ).catch(err=>{console.error(err)});
   }
+}
 
 }
