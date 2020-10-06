@@ -17,23 +17,28 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class EditVisitaComponent implements OnInit {
   ClienteActual: Cliente = { Nombres: '', Apellidos: '', DUI: '', Mascotas: [], Visitas: [] };
   clientesArray: Cliente[];
-  numeroVisita:number=0;
+  numeroVisita: number = 0;
   VisitaActual: Visita = { numero: 0, medicamento: '', tratamiento: '', costo: 0, descuento: 0, total: 0, mascota: '' };
   seleccionado: string = '';
   mensaje: string = '';
   costo: number;
-  
+
   public FormularioActual: FormGroup;
 
-  constructor(private dialogRef: MatDialogRef<EditVisitaComponent>,
-    @Inject(MAT_DIALOG_DATA) data, private database: DatabaseService, private alerta: AlertasService,private formBuilder: FormBuilder,) {
-    this.ClienteActual = data.cliente;
-    this.numeroVisita=data.visita;
-    
-    this.database.getClientes().subscribe(res =>
-    //res es la respuesta de objetos desde firebase
-    {
+  constructor(
+    private dialogRef: MatDialogRef<EditVisitaComponent>,
+    @Inject(MAT_DIALOG_DATA) data,
+    private database: DatabaseService,
+    private alerta: AlertasService,
+    private formBuilder: FormBuilder
+  ) {
 
+    this.ClienteActual = data.cliente;
+    this.numeroVisita = data.visita;
+
+    this.database.getClientes().subscribe(res =>
+    {
+      //res es la respuesta de objetos desde firebase
       this.clientesArray = [];
       this.clientesArray = res.map(item => {
         return {
@@ -45,16 +50,14 @@ export class EditVisitaComponent implements OnInit {
       if (this.ClienteActual.id) {
 
         this.ClienteActual = this.clientesArray.find(x => x.id == this.ClienteActual.id);
-        this.VisitaActual=this.ClienteActual.Visitas.find(x=>x.numero==this.numeroVisita);
+        this.VisitaActual = this.ClienteActual.Visitas.find(x => x.numero == this.numeroVisita);
         this.openForEdit();
-        
+
       }
       else {
         //alert('no encontrado');
         this.alerta.showErrorAlert('Ingrese el nombre de la mascota');
       }
-
-
     });
 
   }
@@ -96,18 +99,18 @@ export class EditVisitaComponent implements OnInit {
     var descuento: number = 0;
     var total: number = 0;
 
-    if (numero <= 1) {
-      descuento = 0;
-      this.mensaje = '0% de descuento';
-    }
-
-    else if (numero > 1 && numero < 6) {
+    if (numero == 2) {
       descuento = costo * 0.05;
       this.mensaje = '5% de descuento';
     }
-    else {
+
+    else if (numero > 5) {
       descuento = costo * 0.08;
       this.mensaje = '8% de descuento';
+    }
+    else {
+      descuento = 0;
+      this.mensaje = '0% de descuento';
     }
 
     total = costo - descuento;
@@ -125,17 +128,17 @@ export class EditVisitaComponent implements OnInit {
 
     } else {
 
-     
+
       this.addOrEdit();
       //alert(this.numeroVisita);
-      
-      this.ClienteActual.Visitas[(this.numeroVisita-1)]=this.VisitaActual;
-     
-     this.database.UpdateCliente(this.ClienteActual).then
+
+      this.ClienteActual.Visitas[(this.numeroVisita - 1)] = this.VisitaActual;
+
+      this.database.UpdateCliente(this.ClienteActual).then
         (res => {
           //alert('visita agregada');
           this.alerta.showSuccessAlert('Visita modificada');
-          
+
         }
 
         ).catch(error => {

@@ -48,8 +48,7 @@ export class AuthService {
     this.NombreUsuario = this.usuario.displayName;
     this.FotoPerfil = this.usuario.photoURL;
     this.correo = this.usuario.email;
-    window.location.reload();
-    //this.router.navigate(['/clientes']);
+    this.router.navigate(['/clientes']);
   }
 
   async logout() {
@@ -64,7 +63,7 @@ export class AuthService {
       timer: 1500
     })
     this.ClearUser();
-    this.router.navigate(['/home']);
+    this.router.navigate(['/']);
   }
   //Metodo que devuelve un bool para ver si esta loggeado el usuario 
   get isLoggedIn(): boolean {
@@ -77,8 +76,7 @@ export class AuthService {
     return this.afAuth.signInWithEmailAndPassword(email, password).then((result) => {
       this.ngZone.run(() => {
         this.alerta.showSuccessAlert('Inicio de sesión exitoso!');
-        window.location.reload();
-        //this.router.navigate(['/clientes']);
+        this.router.navigate(['/clientes']);
       });
       if (result.user) {
         this.usuario = result.user;
@@ -105,8 +103,8 @@ export class AuthService {
           this.usuario = result.user;
           localStorage.setItem('user', JSON.stringify(this.usuario));
           console.log(this.usuario);
-          window.location.reload();
-          //this.router.navigate(['/clientes']);
+          //window.location.reload();
+          this.router.navigate(['/clientes']);
           
         } else {
           localStorage.setItem('user', null);

@@ -85,16 +85,6 @@
             </div>
           </div>
 
-          <!---->
-          <div class="form-group">
-            <input type="text" placeholder="Mascota" class="form-control" formControlName="Mascota" />
-            <!--Alerta de error-->
-            <div *ngIf="FormularioActual.controls.Mascota.invalid" class="alert alert-danger">
-              <div *ngIf="FormularioActual.controls.Mascota.errors.required">
-                Este campo es requerido
-              </div>
-            </div>
-          </div>
           <button class="btn btn-primary btn-space mr-3" (click)="AddCliente()">Agregar</button>
           <button class="btn btn-warning" (click)="addOrEdit();UpdateCLiente()">Modificar</button>
         </form>
