@@ -127,7 +127,7 @@ export class EditVisitaComponent implements OnInit {
 
      
       this.addOrEdit();
-      alert(this.numeroVisita);
+      //alert(this.numeroVisita);
       
       this.ClienteActual.Visitas[(this.numeroVisita-1)]=this.VisitaActual;
      

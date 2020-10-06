@@ -85,18 +85,19 @@ export class FormvisitaComponent implements OnInit {
     var descuento: number = 0;
     var total: number = 0;
 
-    if (numero <= 1) {
-      descuento = 0;
-      this.mensaje = '0% de descuento';
-    }
+    
 
-    else if (numero > 1 && numero < 6) {
+    if (numero == 2) {
       descuento = costo * 0.05;
       this.mensaje = '5% de descuento';
     }
-    else {
+    else if(numero > 5) {
       descuento = costo * 0.08;
       this.mensaje = '8% de descuento';
+    }
+    else {
+      descuento = 0;
+      this.mensaje = '0% de descuento';
     }
 
     total = costo - descuento;

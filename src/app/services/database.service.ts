@@ -3,7 +3,6 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { Observable } from 'rxjs';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Cliente } from '../models/cliente';
-import { Query } from '@firebase/firestore-types'
 
 
 @Injectable({
@@ -15,14 +14,16 @@ export class DatabaseService {
   //el observable sirve para estar pendiente de los cambios en la BD en firebase
   private ClientesCollection: AngularFirestoreCollection<Cliente>;
   Clientes: Observable<Cliente[]>;
+
   //inyectando el firestore para ingresar datos en firebase
-  constructor(private firestore: AngularFirestore, private firebase: AngularFireDatabase) {
+  constructor(
+    private firestore: AngularFirestore,
+    private firebase: AngularFireDatabase) {
     this.getClientes();
   }
 
 
   getClientes() {
-
     //Se crea la coleccion de tipo Alumnos que aloja los datos dentro de la coleccion alumnos en firebase 
     //luego con snapshotChanges se esta pendiente de los cambios este metodo entre otras cosas devueleve el id 
     //del registro pero para hacer eso hay que suscribirse al objeto

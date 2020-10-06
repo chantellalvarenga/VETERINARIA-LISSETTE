@@ -21,11 +21,17 @@ export class FormNewClienteComponent implements OnInit {
   NewCliente: Cliente = { Nombres: '', Apellidos: '', DUI: '', Mascotas: [], Visitas: [] };
   SelectedCliente: Cliente = { Nombres: '', Apellidos: '', DUI: '', Mascotas: [], Visitas: [] };
   public FormularioActual: FormGroup;
-  constructor(private formBuilder: FormBuilder, private database: DatabaseService, private dialog: MatDialog, private router: Router, private alerta: AlertasService) {
-    this.database.getClientes().subscribe(res =>
-    //res es la respuesta de objetos desde firebase
-    {
 
+  constructor(
+    private formBuilder: FormBuilder,
+    private database: DatabaseService,
+    private dialog: MatDialog, private router: Router,
+    private alerta: AlertasService
+  ) {
+
+    this.database.getClientes().subscribe(res =>
+    {
+      //res es la respuesta de objetos desde firebase
       this.clientesArray = [];
       this.clientesArray = res.map(item => {
         return {
@@ -36,8 +42,8 @@ export class FormNewClienteComponent implements OnInit {
       console.log(this.clientesArray);
 
     });
-
   }
+
   private buildForm() {
     this.FormularioActual = this.formBuilder.group({
       Nombres: ['', Validators.required],
@@ -82,7 +88,7 @@ export class FormNewClienteComponent implements OnInit {
           //alert('CLIENTE AGREGADO!');
           this.alerta.showSuccessAlert('Cliente Agregado');
           this.FormularioActual.reset();
-        }).catch(err => {
+        }).catch(err => { 
           //alert('Error');
           this.alerta.showErrorAlert('Lo sentimos, ha ocurrido un error');
           console.error(err);
@@ -191,8 +197,7 @@ export class FormNewClienteComponent implements OnInit {
 
     this.clientesBusqueda = this.clientesArray;
 
-    this.clientesArray[0] = this.clientesArray.find(x =>
-      x.Nombres == Parametro || x.Apellidos == Parametro || x.DUI == Parametro);
+    this.clientesArray[0] = this.clientesArray.find(x => x.Nombres == Parametro || x.Apellidos == Parametro || x.DUI == Parametro);
 
 
   }
