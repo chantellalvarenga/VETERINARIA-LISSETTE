@@ -24,9 +24,11 @@ export class TicketComponent implements OnInit {
   }
 
   downloadFile(): void {
+    let fecha:string = `${this.date.getDate()}-${this.date.getMonth()}-${this.date.getFullYear()}`;
+
     let templateTxt = `Veterinaria Lissette                         Tel: 2305-9882
     Calle El Bambú, Ayutuxtepeque, #22.        Nit: 0614-300899-111-9
-    Fecha:\t${this.date.getDate()}/${this.date.getMonth()}/${this.date.getFullYear()}
+    Fecha:\t${fecha}
 
     Cliente:\t\t${this.dataCliente.Nombres} ${this.dataCliente.Apellidos}
     DUI:\t\t\t${this.dataCliente.DUI}
@@ -40,9 +42,11 @@ export class TicketComponent implements OnInit {
     \t\tDescuento:\t\t-$${Number(this.dataVisita.descuento).toFixed(2)}
     \t\tTotal a Pagar:\t\t $${Number(this.dataVisita.total).toFixed(2)}`
 
+    
+    let ticketName:string = `Ticket-${this.dataCliente.Nombres}-(${fecha}).txt`; 
     var blob = new Blob([templateTxt], { type: 'text/text' });
     let url = window.URL.createObjectURL(blob)
-    this.rend.setAttribute(this.tick.nativeElement, 'download', 'test.txt')
+    this.rend.setAttribute(this.tick.nativeElement, 'download', ticketName)
     this.rend.setAttribute(this.tick.nativeElement, 'href', url)
   }
 }
