@@ -64,7 +64,7 @@ export class AuthService {
       timer: 1500
     })
     this.ClearUser();
-    this.router.navigate(['/home']);
+    window.location.reload();
   }
   //Metodo que devuelve un bool para ver si esta loggeado el usuario 
   get isLoggedIn(): boolean {

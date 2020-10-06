@@ -44,4 +44,11 @@ export class DatabaseService {
     return this.ClientesCollection.doc(_cliente.id).update(_cliente);
   }
 
+SerachClientes(parametro:string)
+{
+  this.ClientesCollection = this.firestore.collection<Cliente>('Clientes');
+  return this.ClientesCollection.ref.where("Nombres", "==", parametro).get();
+
+}
+
 }
